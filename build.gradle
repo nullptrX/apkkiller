@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.nullptrx'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main.java.srcDirs += [
+            'src/main/fake',
+            'src/main/editor',
+            'src/main/dexlib2',
+            'src/main/mt',
+    ]
+}
+
+dependencies {
+    // def jdkHome = System.getenv("JAVA_HOME")
+    // implementation files("$jdkHome/lib/tools.jar")
+    compileOnly files('jdk/rt.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+
+task makeJar(type: Jar) {
+    baseName 'apkkiller'
+    manifestContentCharset 'utf-8'
+    metadataCharset 'utf-8'
+    //noinspection GroovyAssignabilityCheck
+    manifest {
+        // manifest 文件声明主程序入口
+        attributes "Main-Class": "io.github.nullptrx.ApkKiller"
+    }
+    // from configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) }
+    from('src/main/fake/io/github/nullptrx/App.smali') {
+        into('/io/github/nullptrx')
+    }
+    from('build/classes/java/main/') {
+        delete('build/classes/java/main/android')
+        into('/')
+    }
+
+    from('build/resources/main/') {
+        into('/resources')
+    }
+    from project.zipTree('libs/antlr-runtime-3.5.2.jar')
+    from project.zipTree('libs/commons-cli-1.5.0.jar')
+    from project.zipTree('libs/guava-18.0.jar')
+    from project.zipTree('libs/kxml2-2.3.0.jar')
+    into('/')
+}
