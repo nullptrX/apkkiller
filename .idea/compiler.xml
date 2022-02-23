@@ -5,7 +5,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="apkkiller.main" options="--add-exports java.base/sun.security.pkcs=ALL-UNNAMED" />
+      <module name="apkkiller.main" options="--add-exports java.base/sun.security.pkcs=ALL-UNNAMED --add-exports java.base/sun.security.x509=ALL-UNNAMED" />
     </option>
   </component>
 </project>

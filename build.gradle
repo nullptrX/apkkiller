@@ -25,8 +25,30 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+task zipJar(type: Exec) {
+
+    def filename = "apkkiller-1.0.0.jar"
+
+    workingDir 'build/libs'
+
+    commandLine "/usr/bin/zip", "-d", filename, "META-INF/*.SF", "META-INF/*.RSA", "META-INF/*SF"
+
+    //store the output instead of printing to the console:
+    standardOutput = System.out
+}
+
+task copyJar(type: Exec) {
+    def filename = "apkkiller-1.0.0.jar"
+
+    workingDir 'build/libs'
+
+    commandLine "cp", filename, "/Users/su/repo/program/software/apk/"
+    //store the output instead of printing to the console:
+    standardOutput = System.out
+}
 
 task makeJar(type: Jar) {
+    duplicatesStrategy = DuplicatesStrategy.WARN
     baseName 'apkkiller'
     manifestContentCharset 'utf-8'
     metadataCharset 'utf-8'
@@ -44,12 +66,17 @@ task makeJar(type: Jar) {
         into('/')
     }
 
-    from('build/resources/main/') {
-        into('/resources')
-    }
+    // from('build/resources/main/') {
+    //     into('/resources')
+    // }
+    from('build/resources/main/')
+
     from project.zipTree('libs/antlr-runtime-3.5.2.jar')
     from project.zipTree('libs/commons-cli-1.5.0.jar')
     from project.zipTree('libs/guava-18.0.jar')
     from project.zipTree('libs/kxml2-2.3.0.jar')
+    from project.zipTree('libs/uber-apk-signer-1.2.1.jar')
+
     into('/')
+
 }
